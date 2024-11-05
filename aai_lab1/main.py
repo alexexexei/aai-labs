@@ -1,5 +1,4 @@
 import os
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -44,6 +43,7 @@ label_dict = {
 train_X, train_y, test_X, test_y = load_dataset(path, train_file, test_file,
                                                 row, label_dict)
 
+# model 1
 model = LogisticRegression(max_iter=1000, multi_class='ovr')
 model.fit(train_X, train_y)
 
@@ -58,11 +58,63 @@ print(classification_report(test_y, yhat, target_names=target_names))
 
 conf_matrix = confusion_matrix(test_y, yhat)
 
-plt.figure(figsize=(10, 8))
-heatmap = sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues", xticklabels=target_names, yticklabels=target_names)
-heatmap.set_xticklabels(heatmap.get_xticklabels(), rotation=20)
-heatmap.set_yticklabels(heatmap.get_yticklabels(), rotation=60)
-plt.xlabel('Predicted Labels')
-plt.ylabel('True Labels')
-plt.title('Confusion Matrix')
+# model 2
+yhat_2 = KNeighborsClassifier(n_neighbors=3).fit(train_X, train_y).predict(test_X)
+
+print(classification_report(test_y, yhat_2, target_names=target_names))
+
+conf_matrix_2 = confusion_matrix(test_y, yhat_2)
+
+# model 3
+yhat_3 = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42).fit(train_X, train_y).predict(test_X)
+
+print(classification_report(test_y, yhat_3, target_names=target_names))
+
+conf_matrix_3 = confusion_matrix(test_y, yhat_3)
+
+fig, axes = plt.subplots(1, 3, figsize=(20, 4))
+
+sns.heatmap(conf_matrix, annot=True, fmt="d", cmap='viridis', xticklabels=target_names, yticklabels=target_names, ax=axes[0])
+axes[0].set_title('LogisticRegression Confusion Matrix')
+axes[0].set_xlabel('Predicted labels')
+axes[0].set_ylabel('True labels')
+
+sns.heatmap(conf_matrix_2, annot=True, fmt="d", cmap='viridis', xticklabels=target_names, yticklabels=target_names, ax=axes[1])
+axes[1].set_title('KNeighborsClassifier Confusion Matrix')
+axes[1].set_xlabel('Predicted labels')
+axes[1].set_ylabel('True labels')
+
+sns.heatmap(conf_matrix_3, annot=True, fmt="d", cmap='viridis', xticklabels=target_names, yticklabels=target_names, ax=axes[2])
+axes[2].set_title('RandomForestClassifier Confusion Matrix')
+axes[2].set_xlabel('Predicted labels')
+axes[2].set_ylabel('True labels')
+
+plt.tight_layout()
+plt.show()
+
+# model 2.2
+yhat_2_2 = KNeighborsClassifier(n_neighbors=2).fit(train_X, train_y).predict(test_X)
+conf_matrix_2_2 = confusion_matrix(test_y, yhat_2_2)
+# model 2.3
+yhat_2_3 = KNeighborsClassifier(n_neighbors=5).fit(train_X, train_y).predict(test_X)
+conf_matrix_2_3 = confusion_matrix(test_y, yhat_2_3)
+
+fig, axes = plt.subplots(1, 3, figsize=(20, 4))
+
+sns.heatmap(conf_matrix_2_2, annot=True, fmt="d", cmap='viridis', xticklabels=target_names, yticklabels=target_names, ax=axes[0])
+axes[0].set_title('KNeighborsClassifier Confusion Matrix, n=2')
+axes[0].set_xlabel('Predicted labels')
+axes[0].set_ylabel('True labels')
+
+sns.heatmap(conf_matrix_2, annot=True, fmt="d", cmap='viridis', xticklabels=target_names, yticklabels=target_names, ax=axes[1])
+axes[1].set_title('KNeighborsClassifier Confusion Matrix, n=3')
+axes[1].set_xlabel('Predicted labels')
+axes[1].set_ylabel('True labels')
+
+sns.heatmap(conf_matrix_2_3, annot=True, fmt="d", cmap='viridis', xticklabels=target_names, yticklabels=target_names, ax=axes[2])
+axes[2].set_title('KNeighborsClassifier Confusion Matrix, n=5')
+axes[2].set_xlabel('Predicted labels')
+axes[2].set_ylabel('True labels')
+
+plt.tight_layout()
 plt.show()
