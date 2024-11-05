@@ -1,11 +1,3 @@
 **/__pycache__
-**/latex/*.aux
-**/latex/*.fls
-**/latex/*.log
-**/latex/*.out
-**/latex/*.toc
-**/latex/*.fdb_latexmk
-**/latex/*.synctex.gz
-**/latex/*.synctex(busy)
 .idea
 .DS_Store
