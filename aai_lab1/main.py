@@ -103,8 +103,8 @@ conf_matrix_3 = confusion_matrix(test_y, yhat_3)
 
 print_acc3(test_y, yhat, yhat_2, yhat_3, "log_regr", "knn", "rand_forest")
 perform(conf_matrix, conf_matrix_2, conf_matrix_3,
-        target_names, "LogisticRegression", "KNeighborsClassifier", 
-        "RandomForestClassifier")
+        target_names, "LogisticRegression", "KNeighbors", 
+        "RandomForest")
 
 # model 2.2
 yhat_2_2 = KNeighborsClassifier(n_neighbors=2).fit(train_X, train_y).predict(test_X)
@@ -115,5 +115,5 @@ conf_matrix_2_3 = confusion_matrix(test_y, yhat_2_3)
 
 print_acc3(test_y, yhat_2, yhat_2_2, yhat_2_3, "n=2", "n=3", "n=5")
 perform(conf_matrix_2, conf_matrix_2_2, conf_matrix_2_3,
-        target_names, "KNeighborsClassifier n=2", "KNeighborsClassifier n=3", 
-        "KNeighborsClassifier n=5")
+        target_names, "KNeighbors n=2", "KNeighbors n=3", 
+        "KNeighbors n=5")
