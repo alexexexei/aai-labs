@@ -1,4 +1,5 @@
 import os
+import time
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -29,6 +30,12 @@ def print_acc3(test, res1, res2, res3, name1, name2, name3):
     print(f'accuracy:\n{name1}: {accuracy_score(test, res1):.2f}\
             \n{name2}: {accuracy_score(test, res2):.2f}\
             \n{name3}: {accuracy_score(test, res3):.2f}\n')
+    
+
+def print_time3(time1, time2, time3, name1, name2, name3):
+    print(f'time (sec):\n{name1}: {time1:.2f}\
+            \n{name2}: {time2:.2f}\
+            \n{name3}: {time3:.2f}\n')
 
 
 def perform(cm1, cm2, cm3, tn, name1, name2, name3):
@@ -73,10 +80,12 @@ train_X, train_y, test_X, test_y = load_dataset(path, train_file, test_file,
                                                 row, label_dict)
 
 # model 1
+start_time = time.time()
 model = LogisticRegression(max_iter=1000)
 model.fit(train_X, train_y)
 
 yhat = model.predict(test_X)
+time_1 = time.time() - start_time
 
 target_names = [
     'Walking', 'Walking Upstairs', 'Walking Downstairs', 'Sitting', 'Standing',
@@ -88,23 +97,28 @@ print(classification_report(test_y, yhat, target_names=target_names))
 conf_matrix = confusion_matrix(test_y, yhat)
 
 # model 2
+start_time = time.time()
 yhat_2 = KNeighborsClassifier(n_neighbors=3).fit(train_X, train_y).predict(test_X)
+time_2 = time.time() - start_time
 
 print(classification_report(test_y, yhat_2, target_names=target_names))
 
 conf_matrix_2 = confusion_matrix(test_y, yhat_2)
 
 # model 3
+start_time = time.time()
 yhat_3 = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42).fit(train_X, train_y).predict(test_X)
+time_3 = time.time() - start_time
 
 print(classification_report(test_y, yhat_3, target_names=target_names))
 
 conf_matrix_3 = confusion_matrix(test_y, yhat_3)
 
 print_acc3(test_y, yhat, yhat_2, yhat_3, "log_regr", "knn", "rand_forest")
+print_time3(time_1, time_2, time_3, "log_regr", "knn", "rand_forest")
 perform(conf_matrix, conf_matrix_2, conf_matrix_3,
-        target_names, "LogisticRegression", "KNeighbors", 
-        "RandomForest")
+        target_names, "Logistic Regression", "KNeighbors", 
+        "Random Forest")
 
 # model 2.2
 yhat_2_2 = KNeighborsClassifier(n_neighbors=2).fit(train_X, train_y).predict(test_X)
